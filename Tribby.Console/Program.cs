@@ -57,13 +57,14 @@ while (input != "e")
             }
             break;
         case "b":
-            
+
             break;
         case "c":
 
             break;
     }
-    
+
     // Show options
+    input = Console.ReadLine();
 }
 
