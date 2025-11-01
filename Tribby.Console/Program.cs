@@ -5,7 +5,7 @@ using Tribby.Core.Classes;
 var options = new Options();
 
 Console.WriteLine("--------  Welcome to Tribby! --------\n");
-Console.WriteLine("-------  Babebu Budget Board --------\n");
+Console.WriteLine("-------  Babebu Budget Board  -------\n");
 Console.WriteLine("How may I help you?");
 
 options.ShowInitialOptions();
