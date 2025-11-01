@@ -4,7 +4,7 @@ namespace Tribby.Core.Classes
 {
     public class Group
     {
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
         public List<string> _members { get; private set; }
 

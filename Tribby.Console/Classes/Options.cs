@@ -18,8 +18,7 @@ public class Options
         Console.WriteLine("[a] Add a transaction");
         Console.WriteLine("[b] Show group transactions");
         Console.WriteLine("[c] Settle a transaction");
-        Console.WriteLine("[d] Exit`n");
-        Console.WriteLine("[e] Exit`n");
+        Console.WriteLine("[e] Exit\n");
     }
 
     public void Choice (string input)
