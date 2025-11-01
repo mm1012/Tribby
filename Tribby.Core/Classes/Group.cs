@@ -6,17 +6,22 @@ namespace Tribby.Core.Classes
     {
         public string Name { get; set; }
 
+        public List<string> _members { get; private set; }
 
-        public static List<string> _members { get; } = new List<string>();
-
-        public static List<Transaction> Transactions { get; private set; } = new List<Transaction>();
+        public List<Transaction> Transactions { get; private set; }
 
         public float Balance { get; set; } = 0;
 
         public Group(string name)
         {
-            if (Transactions == null) {
+            if (Transactions == null)
+            {
                 Transactions = new List<Transaction>();
+            }
+            
+            if (_members == null)
+            {
+                _members = new List<string>();
             }
 
             Name = name;

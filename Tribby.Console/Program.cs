@@ -1,23 +1,22 @@
 ﻿
 using Tribby.Core.Classes;
 
+
+var options = new Options();
+
 Console.WriteLine(" Welcome to Tribby!");
 Console.WriteLine("How may I help you?");
 
-Console.WriteLine("[a] Add a transaction");
-Console.WriteLine("[b] Update a transaction");
-Console.WriteLine("[c] Show group transactions");
-Console.WriteLine("[d] Settle a transaction");
-Console.WriteLine("[e] Exit`n");
-string? input = Console.ReadLine();
+options.ShowInitialOptions();
+options.Choice(Console.ReadLine() ?? ""); 
 
-Group group = new Group("Babebu Budget Board");
+var group = new Group("Babebu Budget Board");
 group.AddMember("Matt");
 group.AddMember("Levine");
 
-while (input != "e")
+while (options.Current != "e")
 {
-    switch (input)
+    switch (options.Current)
     {
         case "a":
             Console.WriteLine("Name of the group: ");
@@ -66,7 +65,6 @@ while (input != "e")
             break;
     }
 
-    // Show options
-    input = Console.ReadLine();
+    options.ShowInitialOptions();
+    options.Choice(Console.ReadLine() ?? ""); 
 }
-
