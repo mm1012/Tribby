@@ -9,24 +9,22 @@ namespace Tribby.Core.Classes
 
         public static List<string> _members { get; } = new List<string>();
 
-        public static List<Expense> Expenses { get; } = new List<Expense>();
+        public static List<Transaction> Transactions { get; private set; } = new List<Transaction>();
 
-        public Group ()
-        {
-        }
+        public float Balance { get; set; } = 0;
 
         public Group(string name)
         {
-            // if (Expenses == null) {
-            //     Expenses = new List<Expense>();
-            // }
+            if (Transactions == null) {
+                Transactions = new List<Transaction>();
+            }
 
             Name = name;
         }
         
         public void AddMember(string member)
         {
-            
+            _members.Add(member);
         }
     }
 }

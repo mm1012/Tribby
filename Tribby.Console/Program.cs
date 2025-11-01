@@ -4,14 +4,16 @@ using Tribby.Core.Classes;
 Console.WriteLine(" Welcome to Tribby!");
 Console.WriteLine("How may I help you?");
 
-Console.WriteLine("[a] Create/Join a group");
-Console.WriteLine("[b] Add an expense");
-Console.WriteLine("[c] Show group expenses");
-Console.WriteLine("[d] Settle an expense");
+Console.WriteLine("[a] Add a transaction");
+Console.WriteLine("[b] Update a transaction");
+Console.WriteLine("[c] Show group transactions");
+Console.WriteLine("[d] Settle a transaction");
 Console.WriteLine("[e] Exit`n");
 string? input = Console.ReadLine();
 
-Group group = new Group();
+Group group = new Group("Babebu Budget Board");
+group.AddMember("Matt");
+group.AddMember("Levine");
 
 while (input != "e")
 {
