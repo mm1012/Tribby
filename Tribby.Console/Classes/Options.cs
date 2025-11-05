@@ -1,3 +1,6 @@
+using System.ComponentModel;
+using Tribby.Core.Classes;
+
 public class Options
 {
 
@@ -8,7 +11,7 @@ public class Options
         Current = input;
     }
 
-    public Options ()
+    public Options()
     {
         Current = "";
     }
@@ -16,13 +19,46 @@ public class Options
     public void ShowInitialOptions()
     {
         Console.WriteLine("[a] Add a transaction");
-        Console.WriteLine("[b] Show group transactions");
+        Console.WriteLine("[b] Show individual transactions");
         Console.WriteLine("[c] Settle a transaction");
-        Console.WriteLine("[e] Exit\n");
+        Console.WriteLine("[d] Exit\n");
     }
 
-    public void Choice (string input)
+    public void Choose(string input)
     {
         Current = input;
     }
+
+    public void ViewTransactionOptions()
+    {
+        Console.WriteLine("[a] Add a transaction");
+        Console.WriteLine("[b] Update a transaction");
+        Console.WriteLine("[c] Settle a transaction");
+        Console.WriteLine("[d] Return \n");
+    }
+
+    public Transaction AddTransactionDisplay(int groupMemberCount)
+    {
+        var transaction = new Transaction(groupMemberCount);
+
+        Console.WriteLine("Input a description for the transaction: ");
+        string description = GetInput();
+        Console.WriteLine("Input the amount of the transaction: ");
+        string amntString = GetInput();
+        double amount = 0;
+        double.TryParse(amntString, out amount);
+        Console.WriteLine("Who paid for the transaction: ");
+        string payer = GetInput();
+
+        
+        
+
+        return transaction;
+    }
+
+    public string GetInput()
+    {
+        
+        return Console.ReadLine() ?? "";
+    } 
 }

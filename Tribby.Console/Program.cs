@@ -9,7 +9,7 @@ Console.WriteLine("-------  Babebu Budget Board  -------\n");
 Console.WriteLine("How may I help you?");
 
 options.ShowInitialOptions();
-options.Choice(Console.ReadLine() ?? ""); 
+options.Choose(options.GetInput()); 
 
 var group = new Group("Babebu Budget Board");
 group.AddMember("Matt");
@@ -23,13 +23,12 @@ while (options.Current != "e")
             
             break;
         case "b":
-
+        
             break;
         case "c":
 
             break;
     }
-
     options.ShowInitialOptions();
-    options.Choice(Console.ReadLine() ?? ""); 
+    options.Choose(options.GetInput()); 
 }
