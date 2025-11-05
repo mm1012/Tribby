@@ -2,7 +2,7 @@ public class Member {
     
     public string Name { get; set; }
 
-    public float Balance { get; set; } = 0;
+    public double Balance { get; set; } = 0;
 
 
     public Member(string name)
@@ -10,7 +10,7 @@ public class Member {
         Name = name;
     }
     
-    public void UpdateBalance (float amount)
+    public void UpdateBalance (double amount)
     {
         Balance += amount;
     }

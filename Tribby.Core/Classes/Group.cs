@@ -10,7 +10,7 @@ namespace Tribby.Core.Classes
 
         public List<Transaction> Transactions { get; private set; }
 
-        public float Balance { get; set; } = 0;
+        public double Balance { get; set; } = 0;
 
         public Group(string name)
         {
