@@ -51,6 +51,8 @@ public class Options
         string payer = GetInput();
 
         
+        Console.WriteLine("Update transaction: ");
+        Console.WriteLine("Continue [y/n(cancel and return to main screen)]: ");
         
 
         return transaction;
@@ -58,7 +60,12 @@ public class Options
 
     public string GetInput()
     {
-        
         return Console.ReadLine() ?? "";
     } 
+    
+    public bool CancellableReadline()
+    {
+        bool isCancelled = false;
+        return isCancelled;
+    }
 }

@@ -7,10 +7,12 @@ namespace Tribby.Core.Classes
         public string Name { get; private set; }
 
         public List<string> _members { get; private set; }
-
+        
         public List<Transaction> Transactions { get; private set; }
 
-        public double Balance { get; set; } = 0;
+        //Create hashtable/dictionary to hold transactions for each member(?)
+
+        public double Balance { get; private set; } = 0;
 
         public Group(string name)
         {
