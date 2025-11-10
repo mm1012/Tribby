@@ -6,6 +6,8 @@ public class Options
 
     public string Current { get; private set; }
 
+    public string ExitOption { get; private set; } = "d";
+
     public Options(string input)
     {
         Current = input;
@@ -21,7 +23,7 @@ public class Options
         Console.WriteLine("[a] Add a transaction");
         Console.WriteLine("[b] Show individual transactions");
         Console.WriteLine("[c] Settle a transaction");
-        Console.WriteLine("[d] Exit\n");
+        Console.WriteLine("[{ExitOption}] Exit\n");
     }
 
     public void Choose(string input)
