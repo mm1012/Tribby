@@ -1,8 +1,9 @@
 ﻿
 using Tribby.Core.Classes;
 
-
+var sqliteDb = new SqliteDbHandler();
 var options = new Options();
+
 
 Console.WriteLine("--------  Welcome to Tribby! --------\n");
 Console.WriteLine("-------  Babebu Budget Board  -------\n");
