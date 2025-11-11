@@ -15,7 +15,7 @@ public class Options
 
     public Options()
     {
-        Current = "";
+        Current = string.Empty;
     }
 
     public void ShowInitialOptions()
@@ -23,7 +23,7 @@ public class Options
         Console.WriteLine("[a] Add a transaction");
         Console.WriteLine("[b] Show individual transactions");
         Console.WriteLine("[c] Settle a transaction");
-        Console.WriteLine("[{ExitOption}] Exit\n");
+        Console.WriteLine($"[{ExitOption}] Exit\n");
     }
 
     public void Choose(string input)
@@ -39,7 +39,7 @@ public class Options
         Console.WriteLine("[d] Return \n");
     }
 
-    public Transaction AddTransactionDisplay(int groupMemberCount)
+    public Transaction DisplayAddTransactionOptions(int groupMemberCount)
     {
         var transaction = new Transaction(groupMemberCount);
 

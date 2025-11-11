@@ -1,8 +1,11 @@
 ﻿
 using Tribby.Core.Classes;
+using Tribby.Core.Handlers;
+
 
 var sqliteDb = new SqliteDbHandler();
 var options = new Options();
+sqliteDb.Query();
 
 
 Console.WriteLine("--------  Welcome to Tribby! --------\n");
@@ -12,11 +15,7 @@ Console.WriteLine("How may I help you?");
 options.ShowInitialOptions();
 options.Choose(options.GetInput()); 
 
-var group = new Group("Babebu Budget Board");
-group.AddMember("Matt");
-group.AddMember("Levine");
-
-while (options.Current != "e")
+while (options.Current != options.ExitOption)
 {
     switch (options.Current)
     {
