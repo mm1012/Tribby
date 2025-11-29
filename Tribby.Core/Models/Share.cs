@@ -8,5 +8,9 @@ public class Share
 
     public virtual int TransactionId { get; set; }
 
-    public string Operation { get; set; }
+    public string Operator { get; set; }
+
+    public int Operand { get; set;}
+
+    public List<Transaction> Transactions { get; }
 }

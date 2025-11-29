@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 public class TribbyDbContext : DbContext
 {
     public DbSet<User> Users { get; set;}
-
     public DbSet<Group> Groups { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
     public DbSet<Share> Shares { get; set; }
@@ -12,8 +11,9 @@ public class TribbyDbContext : DbContext
 
     public TribbyDbContext ()
     {
-         var folder = Environment.SpecialFolder.LocalApplicationData;
+        var folder = Environment.SpecialFolder.LocalApplicationData;
         var path = Environment.GetFolderPath(folder);
+        // Console.WriteLine(path);
         DbPath = Path.Join(path, "tribby.db");
     }
 
