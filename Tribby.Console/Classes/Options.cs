@@ -39,10 +39,8 @@ public class Options
         Console.WriteLine("[d] Return \n");
     }
 
-    public Transaction DisplayAddTransactionOptions(int groupMemberCount)
+    public void DisplayAddTransactionOptions(int groupMemberCount)
     {
-        var transaction = new Transaction(groupMemberCount);
-
         Console.WriteLine("Input a description for the transaction: ");
         string description = GetInput();
         Console.WriteLine("Input the amount of the transaction: ");
@@ -56,8 +54,6 @@ public class Options
         Console.WriteLine("Update transaction: ");
         Console.WriteLine("Continue [y/n(cancel and return to main screen)]: ");
         
-
-        return transaction;
     }
 
     public string GetInput()

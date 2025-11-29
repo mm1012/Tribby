@@ -4,9 +4,9 @@ public class Share
 
     public int ShareType { get; set; }
 
-    public int UserId { get; set; }
+    public virtual int UserId { get; set; }
 
-    public int TransactionId { get; set; }
+    public virtual int TransactionId { get; set; }
 
-    public double Amount { get; set; }
+    public string Operation { get; set; }
 }
