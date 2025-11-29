@@ -1,11 +1,9 @@
 ﻿
-using Tribby.Core.Classes;
 using Tribby.Core.Handlers;
 
 
 var sqliteDb = new SqliteDbHandler();
 var options = new Options();
-sqliteDb.Query();
 
 
 Console.WriteLine("--------  Welcome to Tribby! --------\n");
@@ -27,6 +25,8 @@ while (options.Current != options.ExitOption)
             break;
         case "c":
 
+            break;
+        case "debug":
             break;
     }
     options.ShowInitialOptions();

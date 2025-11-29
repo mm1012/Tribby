@@ -1,5 +1,3 @@
-using System.ComponentModel;
-using Tribby.Core.Classes;
 
 public class Options
 {
