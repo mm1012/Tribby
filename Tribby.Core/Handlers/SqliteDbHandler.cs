@@ -12,24 +12,22 @@ namespace Tribby.Core.Handlers
 
         private static string _dbPath = $"{dbName}";
 
-        private static TribbyDbContext DbConnection;
+        public TribbyDbContext? DbContext { get; private set; }
 
         public SqliteDbHandler()
         {
             var folder = Environment.SpecialFolder.LocalApplicationData;
             var path = Environment.GetFolderPath(folder);
             _dbPath = Path.Join(path, "Tribby.db");
-
-            if (DbConnection == null)
-            {
-                DbConnection = new TribbyDbContext();
-            }
         }
 
 
         public void Connect()
         {
-            throw new NotImplementedException();
+            if (DbContext == null)
+            {
+                DbContext = new TribbyDbContext();
+            }
         }
 
         public void Insert()
@@ -40,6 +38,17 @@ namespace Tribby.Core.Handlers
         public void Query()
         {
             throw new NotImplementedException();
+        }
+
+        public void CloseConnection ()
+        {
+            if (DbContext == null)
+            {
+                return;
+            }
+
+            DbContext.Dispose();
+            DbContext = null;
         }
     }
 }

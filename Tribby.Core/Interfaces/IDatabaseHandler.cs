@@ -4,4 +4,6 @@ interface IDatabaseHandler {
     void Insert();
 
     void Query();
+
+    void CloseConnection();
 }
