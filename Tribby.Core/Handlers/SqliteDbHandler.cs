@@ -84,17 +84,17 @@ namespace Tribby.Core.Handlers
             return group;
         }
 
-        public async void CreateGroup(string groupName)
+        public async Task<Group> CreateGroup(string groupName)
         {
             if (DbContext == null)
             {
-                return;
+                return null;
             }
 
             if (await GetGroupByName(groupName) != null)
             {
                 Debug.WriteLine($"Group {groupName} already exists.");
-                return;
+                return null;
             }
 
             var group = new Group
@@ -103,8 +103,10 @@ namespace Tribby.Core.Handlers
                 Balance = 0
             };
 
-            DbContext.Groups.Add(group);
+            var returnedgroup = DbContext.Groups.Add(group);
             await DbContext.SaveChangesAsync();
+
+            return null;
         }
 
 
@@ -185,6 +187,32 @@ namespace Tribby.Core.Handlers
                 .ToListAsync();
 
             return users;
+        }
+
+        public List<EnumShareType> GetShareTypes()
+        {
+            if (DbContext == null)
+            {
+                return new List<EnumShareType>();
+            }
+
+            var shareTypes = DbContext.EnumShareTypes
+                .ToList();
+
+            return shareTypes;
+        }
+        
+        public async Task<int> GetGroupMemberCount(int groupId)
+        {
+            if (DbContext == null)
+            {
+                return 0;
+            }
+
+            var count = await DbContext.Users
+                .Where(u => u.GroupId == groupId)
+                .CountAsync();
+            return count;
         }
 
         public async Task<List<Transaction>> GetUserTransactions(int userId)
