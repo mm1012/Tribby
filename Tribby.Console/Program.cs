@@ -18,7 +18,7 @@ foreach (var grp in groups)
 
 Console.WriteLine("Enter the Id of your group: ");
 int groupId = options.GetIntInput();
-sqliteDb.CreateGroup("Kazen");
+// sqliteDb.CreateGroup("Test Group");
 
 Group group = groups.Where(g => g.Id == groupId).First();
 

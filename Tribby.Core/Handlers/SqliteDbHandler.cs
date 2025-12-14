@@ -26,13 +26,7 @@ namespace Tribby.Core.Handlers
             {
                 DbContext = new TribbyDbContext();
 
-                //DbContext.Database.EnsureDeleted();
-                DbContext.Database.EnsureCreated();
-
-                // DbContext.Add(new User { Id = 1, Name = "Matt", GroupId = 1});
-                // DbContext.Add(new User { Id = 2, Name = "Levine", GroupId = 1});
-                // DbContext.Add(new Group { Balance = 0, Id = 1, Name = "BBB"});
-                // await DbContext.SaveChangesAsync();
+                // DbContext.Database.EnsureCreated();
             }
         }
 
@@ -84,7 +78,7 @@ namespace Tribby.Core.Handlers
             return group;
         }
 
-        public async Task<Group> CreateGroup(string groupName)
+        public async Task<Group?> CreateGroup(string groupName)
         {
             if (DbContext == null)
             {
@@ -103,10 +97,10 @@ namespace Tribby.Core.Handlers
                 Balance = 0
             };
 
-            var returnedgroup = DbContext.Groups.Add(group);
+            DbContext.Groups.Add(group);
             await DbContext.SaveChangesAsync();
 
-            return null;
+            return group;
         }
 
 
@@ -226,6 +220,19 @@ namespace Tribby.Core.Handlers
                 .Where(t => t.UserId == userId)
                 .ToListAsync();
             return transactions;
+        }
+
+        public async Task<Transaction?> CreateTransaction(Transaction transaction)
+        {
+            if (DbContext == null)
+            {
+                return null;
+            }
+
+            DbContext.Transactions.Add(transaction);
+            await DbContext.SaveChangesAsync();
+
+            return transaction;
         }
     }
 }
