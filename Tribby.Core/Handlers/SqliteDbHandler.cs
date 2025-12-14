@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
@@ -68,16 +69,139 @@ namespace Tribby.Core.Handlers
             }
             
             var groups = await DbContext.Groups
-                .FromSqlRaw(@"select * from Groups where Id == 1")
-                .SingleAsync();
-                //             left join Groups g on g.Id = gu.GroupsId")
-            
-            // var users = await DbContext.Entry(groups)
-            //     .Collection(b => b.Users)
-            //     .LoadAsync();
+                .Include(g => g.Users)
+                .ToDictionaryAsync(g => g.Id);
+            return groups.Values.ToList();
+        }
+
+        public async Task<Group?> GetGroupByName(string groupName)
+        {
+            if (DbContext == null)
+            {
+                return null;
+            }
+
+            var group = await DbContext.Groups
+                .Include(g => g.Users)
+                .FirstOrDefaultAsync(g => g.Name == groupName);
+
+            return group;
+        }
+
+        public async void CreateGroup(string groupName)
+        {
+            if (DbContext == null)
+            {
+                return;
+            }
+
+            if (await GetGroupByName(groupName) != null)
+            {
+                Debug.WriteLine($"Group {groupName} already exists.");
+                return;
+            }
+
+            var group = new Group
+            {
+                Name = groupName,
+                Balance = 0
+            };
+
+            DbContext.Groups.Add(group);
+            await DbContext.SaveChangesAsync();
+        }
 
 
-            return new List<Group>{groups};
+        public async void CheckIfGroupExists(string groupName)
+        {
+            if (DbContext == null)
+            {
+                return;
+            }
+
+            var group = await DbContext.Groups
+                .FirstOrDefaultAsync(g => g.Name == groupName);
+
+            if (group != null)
+            {
+                Debug.WriteLine($"Group {groupName} already exists.");
+            }
+        }
+
+        public async void CreateUser(string userName, int groupId)
+        {
+            if (DbContext == null)
+            {
+                return;
+            }
+
+            var user = new User
+            {
+                Name = userName,
+                GroupId = groupId
+            };
+
+            if (await CheckIfUserExists(userName, groupId) != null)
+            {
+                Debug.WriteLine($"User {userName} already exists in group {groupId}.");
+                return;
+            }
+
+            DbContext.Users.Add(user);
+            await DbContext.SaveChangesAsync();
+        }
+
+        public async Task<User?> GetUserByName(string userName, int groupId)
+        {
+            if (DbContext == null)
+            {
+                return null;
+            }
+
+            var user = await DbContext.Users
+                .FirstOrDefaultAsync(u => u.Name == userName && u.GroupId == groupId);
+
+            return user;
+        }
+
+        public async Task<User?> CheckIfUserExists(string userName, int groupId)
+        {
+            if (DbContext == null)
+            {
+                return null;
+            }
+
+            var user = await DbContext.Users
+                .FirstOrDefaultAsync(u => u.Name == userName && u.GroupId == groupId);
+
+            return user;
+        }
+
+        public async Task<List<User>> GetUsersInAGroup(int groupId)
+        {
+            if (DbContext == null)
+            {
+                return new List<User>();
+            }
+
+            var users = await DbContext.Users
+                .Where(u => u.GroupId == groupId)
+                .ToListAsync();
+
+            return users;
+        }
+
+        public async Task<List<Transaction>> GetUserTransactions(int userId)
+        {
+            if (DbContext == null)
+            {
+                return new List<Transaction>();
+            }
+
+            var transactions = await DbContext.Transactions
+                .Where(t => t.UserId == userId)
+                .ToListAsync();
+            return transactions;
         }
     }
 }

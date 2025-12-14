@@ -54,14 +54,34 @@ public class Options
         
     }
 
+    public void DisplayUsers (List<User> users)
+    {
+        Console.WriteLine("-------  Users in Group  -------\n");
+        foreach (var user in users)
+        {
+            Console.WriteLine($"[{user.Id}] {user.Name}");
+        }
+        Console.WriteLine();
+    }
+
     public string GetInput()
     {
         return Console.ReadLine() ?? "";
     } 
-    
-    public bool CancellableReadline()
+
+    public int GetIntInput()
     {
-        bool isCancelled = false;
-        return isCancelled;
+        string input = Console.ReadLine() ?? "0";
+        int intInput = 0;
+        int.TryParse(input, out intInput);
+        return intInput;
+    }
+
+    public decimal GetDecimalInput()
+    {
+        string input = Console.ReadLine() ?? "0.0";
+        decimal decInput = 0;
+        decimal.TryParse(input, out decInput);
+        return decInput;
     }
 }
