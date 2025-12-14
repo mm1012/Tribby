@@ -1,5 +1,4 @@
 ﻿
-using System.Diagnostics.CodeAnalysis;
 using Tribby.Core.Handlers;
 
 
@@ -10,26 +9,36 @@ sqliteDb.Connect();
 
 Console.WriteLine("--------  Welcome to Tribby! --------\n");
 
-string groupName = "Babebu Budget Board";
-sqliteDb.CreateGroup(groupName);
+List<Group> groups = await sqliteDb.GetGroups();
 
-Group group = await sqliteDb.GetGroupByName(groupName);
+foreach (var grp in groups)
+{
+    Console.WriteLine($"[{grp.Id}] {grp.Name}");
+}
+
+Console.WriteLine("Enter the Id of your group: ");
+int groupId = options.GetIntInput();
+sqliteDb.CreateGroup("Kazen");
+
+Group group = groups.Where(g => g.Id == groupId).First();
 
 if (group == null)
 {
-    Console.WriteLine("Failed to create or retrieve group.");
+    Console.WriteLine($"Failed to retrieve group [{group.Name}].");
     // groupName = options.PromptForGroupName();
     return;
 }
 
-sqliteDb.CreateUser("Matt", group.Id);
+// sqliteDb.CreateUser("Matt", group.Id);
 
-sqliteDb.CreateUser("Levine", group.Id);
+// sqliteDb.CreateUser("Levine", group.Id);
 
 User currentUser = await sqliteDb.GetUserByName("Matt", group.Id);
 
 Console.WriteLine($"-------  {group.Name}  -------\n");
-Console.WriteLine("How may I help you?");
+Console.WriteLine("How may I help you?\n");
+
+Console.WriteLine($"Current Balance: {group.Balance}\n");
 
 options.ShowInitialOptions();
 options.Choose(options.GetInput()); 
@@ -39,8 +48,6 @@ while (options.Current != options.ExitOption)
     switch (options.Current)
     {
         case "a":
-            List<Transaction> userTransactions = await sqliteDb.GetUserTransactions(currentUser.Id);
-
             Console.WriteLine("Who paid for the expense?");
             List<User> users = await sqliteDb.GetUsersInAGroup(group.Id);
             options.DisplayUsers(users);
@@ -51,9 +58,37 @@ while (options.Current != options.ExitOption)
 
             Console.WriteLine("Enter the amount of the transaction: ");
             decimal totalAmount = options.GetDecimalInput();
-
-            Console.WriteLine("")
             
+            List<EnumShareType> shareTypes = sqliteDb.GetShareTypes();
+            foreach (var shareType in shareTypes)
+            {
+                Console.WriteLine($"[{shareType.ID}] {shareType.Description}");
+            }
+            Console.WriteLine("Choose a share type: ");
+            int shareTypeId = options.GetIntInput();
+
+            // options.DisplayTransaction();
+
+            // Console.WriteLine("Confirm transaction: ");
+
+            // if (options.Confirm(options.GetInput()))
+            // {
+            //     var transaction = new Transaction
+            //     {
+            //         Description = description,
+            //         Amount = totalAmount,
+            //         UserId = payerId,
+            //         IsCleared = false
+            //     };
+
+            //     await sqliteDb.CreateTransaction(transaction);
+            //     Console.WriteLine("Transaction created successfully.");
+            // }
+            // else
+            // {
+                
+            // }
+
             break;
         case "b":
         
