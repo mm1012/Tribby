@@ -21,4 +21,18 @@ public class TribbyDbContext : DbContext
     // special "local" folder for your platform.
     protected override void OnConfiguring(DbContextOptionsBuilder options)
         => options.UseSqlite($"Data Source={DbPath}");
+
+    protected override void OnModelCreating(ModelBuilder builder) {
+        builder.Entity<Group>().Property(g => g.Balance)
+            .HasConversion<double>()
+            .HasColumnType("NUMERIC");
+        
+        builder.Entity<Transaction>().Property(t => t.Amount)
+            .HasConversion<double>()
+            .HasColumnType("NUMERIC");
+
+        builder.Entity<Share>().Property(s => s.Amount)
+            .HasConversion<double>()
+            .HasColumnType("NUMERIC");
+    }
 }

@@ -6,7 +6,7 @@ public class Transaction
 
     public string Description { get; set; }
 
-    public double Amount { get; set; }
+    public decimal Amount { get; set; }
 
     public virtual int UserId { get; set; }
 

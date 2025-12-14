@@ -12,5 +12,7 @@ public class Share
 
     public int Operand { get; set;}
 
+    public decimal Amount { get; set; }
+
     public List<Transaction> Transactions { get; }
 }
