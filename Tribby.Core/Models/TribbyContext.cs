@@ -6,6 +6,7 @@ public class TribbyDbContext : DbContext
     public DbSet<Group> Groups { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
     public DbSet<Share> Shares { get; set; }
+    public DbSet<EnumShareType> EnumShareTypes { get; set; }
 
     public string DbPath { get; } 
 
