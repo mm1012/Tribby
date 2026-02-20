@@ -5,29 +5,31 @@ namespace Tribby.Core.Handlers
 {
     public class SqliteDbHandler : IDatabaseHandler
     {
-
         private static string _connectionString = $"Data Source={_dbPath};foreign keys=true;";
 
         private static string dbName = "Tribby.db";
 
         private static string _dbPath = $"{dbName}";
 
-        public static TribbyDbContext? DbContext { get; private set; }
+        public static TribbyDbContext DbContext { get; private set; }
 
-        public SqliteDbHandler()
+        static SqliteDbHandler()
         {
             var path = @"..\..\..\..\";
             _dbPath = Path.Join(path, "Tribby.db");
-        }
 
-        public async void Connect()
-        {
             if (DbContext == null)
             {
                 DbContext = new TribbyDbContext();
 
                 // DbContext.Database.EnsureCreated();
             }
+        }
+
+        public async void Connect()
+        {
+            DbContext.Database.OpenConnection();
+            await DbContext.Database.EnsureCreatedAsync();
         }
 
         public void Insert()
@@ -42,13 +44,7 @@ namespace Tribby.Core.Handlers
 
         public void CloseConnection ()
         {
-            if (DbContext == null)
-            {
-                return;
-            }
-
             DbContext.Dispose();
-            DbContext = null;
         }
 
         public async Task<List<Group>> GetGroups()
@@ -60,8 +56,8 @@ namespace Tribby.Core.Handlers
             
             var groups = await DbContext.Groups
                 .Include(g => g.Users)
-                .ToDictionaryAsync(g => g.Id);
-            return groups.Values.ToList();
+                .ToListAsync();
+            return groups;
         }
 
         public async Task<Group?> GetGroupByName(string groupName)
@@ -80,11 +76,6 @@ namespace Tribby.Core.Handlers
 
         public async Task<Group?> CreateGroup(string groupName)
         {
-            if (DbContext == null)
-            {
-                return null;
-            }
-
             if (await GetGroupByName(groupName) != null)
             {
                 Debug.WriteLine($"Group {groupName} already exists.");
@@ -106,11 +97,6 @@ namespace Tribby.Core.Handlers
 
         public async void CheckIfGroupExists(string groupName)
         {
-            if (DbContext == null)
-            {
-                return;
-            }
-
             var group = await DbContext.Groups
                 .FirstOrDefaultAsync(g => g.Name == groupName);
 
@@ -122,11 +108,6 @@ namespace Tribby.Core.Handlers
 
         public async void CreateUser(string userName, int groupId)
         {
-            if (DbContext == null)
-            {
-                return;
-            }
-
             var user = new User
             {
                 Name = userName,
@@ -145,11 +126,6 @@ namespace Tribby.Core.Handlers
 
         public async Task<User?> GetUserByName(string userName, int groupId)
         {
-            if (DbContext == null)
-            {
-                return null;
-            }
-
             var user = await DbContext.Users
                 .FirstOrDefaultAsync(u => u.Name == userName && u.GroupId == groupId);
 
@@ -158,11 +134,6 @@ namespace Tribby.Core.Handlers
 
         public async Task<User?> CheckIfUserExists(string userName, int groupId)
         {
-            if (DbContext == null)
-            {
-                return null;
-            }
-
             var user = await DbContext.Users
                 .FirstOrDefaultAsync(u => u.Name == userName && u.GroupId == groupId);
 
@@ -171,11 +142,6 @@ namespace Tribby.Core.Handlers
 
         public async Task<List<User>> GetUsersInAGroup(int groupId)
         {
-            if (DbContext == null)
-            {
-                return new List<User>();
-            }
-
             var users = await DbContext.Users
                 .Where(u => u.GroupId == groupId)
                 .ToListAsync();
@@ -185,11 +151,6 @@ namespace Tribby.Core.Handlers
 
         public List<EnumShareType> GetShareTypes()
         {
-            if (DbContext == null)
-            {
-                return new List<EnumShareType>();
-            }
-
             var shareTypes = DbContext.EnumShareTypes
                 .ToList();
 
@@ -198,10 +159,6 @@ namespace Tribby.Core.Handlers
         
         public async Task<int> GetGroupMemberCount(int groupId)
         {
-            if (DbContext == null)
-            {
-                return 0;
-            }
 
             var count = await DbContext.Users
                 .Where(u => u.GroupId == groupId)
@@ -211,11 +168,6 @@ namespace Tribby.Core.Handlers
 
         public async Task<List<Transaction>> GetUserTransactions(int userId)
         {
-            if (DbContext == null)
-            {
-                return new List<Transaction>();
-            }
-
             var transactions = await DbContext.Transactions
                 .Where(t => t.UserId == userId)
                 .ToListAsync();
@@ -224,11 +176,6 @@ namespace Tribby.Core.Handlers
 
         public async Task<Transaction?> CreateTransaction(Transaction transaction)
         {
-            if (DbContext == null)
-            {
-                return null;
-            }
-
             DbContext.Transactions.Add(transaction);
             await DbContext.SaveChangesAsync();
 
