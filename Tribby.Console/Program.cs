@@ -1,15 +1,10 @@
 ﻿
-using Tribby.Core.Handlers;
-
-
-var sqliteDb = new SqliteDbHandler();
 var options = new Options();
-
-sqliteDb.Connect();
+var businessLogic = new BusinessLogic();
 
 Console.WriteLine("--------  Welcome to Tribby! --------\n");
 
-List<Group> groups = await sqliteDb.GetGroups();
+List<Group> groups = await businessLogic.GetGroups();
 
 foreach (var grp in groups)
 {
@@ -20,26 +15,30 @@ Console.WriteLine("Enter the Id of your group: ");
 int groupId = options.GetIntInput();
 // sqliteDb.CreateGroup("Test Group");
 
-Group group = groups.Where(g => g.Id == groupId).First();
+Group? group = await businessLogic.SelectGroup(groupId);
 
 if (group == null)
 {
-    Console.WriteLine($"Failed to retrieve group [{group.Name}].");
-    // groupName = options.PromptForGroupName();
+    Console.WriteLine($"Group with Id [{groupId}] not found.");
     return;
 }
 
-// sqliteDb.CreateUser("Matt", group.Id);
+List<User> users = await businessLogic.GetUsersFromSelectedGroup();
+Console.WriteLine("Select your user Id: ");
+options.DisplayUsers(users);
+int userId = options.GetIntInput();
 
-// sqliteDb.CreateUser("Levine", group.Id);
+User? user = users.FirstOrDefault(u => u.Id == userId);
+if (user == null)
+{
+    Console.WriteLine($"User with Id [{userId}] not found.");
+    return;
+}
+businessLogic.SelectUser(user);
 
-User currentUser = await sqliteDb.GetUserByName("Matt", group.Id);
 
 Console.WriteLine($"-------  {group.Name}  -------\n");
-Console.WriteLine("How may I help you?\n");
-
 Console.WriteLine($"Current Balance: {group.Balance}\n");
-
 options.ShowInitialOptions();
 options.Choose(options.GetInput()); 
 
@@ -49,7 +48,7 @@ while (options.Current != options.ExitOption)
     {
         case "a":
             Console.WriteLine("Who paid for the expense?");
-            List<User> users = await sqliteDb.GetUsersInAGroup(group.Id);
+            Console.WriteLine("Select your user Id: ");
             options.DisplayUsers(users);
             int payerId = options.GetIntInput();
 
@@ -59,7 +58,7 @@ while (options.Current != options.ExitOption)
             Console.WriteLine("Enter the amount of the transaction: ");
             decimal totalAmount = options.GetDecimalInput();
             
-            List<EnumShareType> shareTypes = sqliteDb.GetShareTypes();
+            List<EnumShareType> shareTypes = businessLogic.GetShareTypes();
             foreach (var shareType in shareTypes)
             {
                 Console.WriteLine($"[{shareType.ID}] {shareType.Description}");
@@ -81,7 +80,7 @@ while (options.Current != options.ExitOption)
             //         IsCleared = false
             //     };
 
-            //     await sqliteDb.CreateTransaction(transaction);
+            //     businessLogic.ProcessShare(shareTypeId, totalAmount);
             //     Console.WriteLine("Transaction created successfully.");
             // }
             // else
@@ -103,4 +102,4 @@ while (options.Current != options.ExitOption)
     options.Choose(options.GetInput()); 
 }
 
-sqliteDb.CloseConnection();
+businessLogic.CloseConnection();

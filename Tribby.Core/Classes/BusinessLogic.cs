@@ -1,15 +1,116 @@
+using System.Diagnostics;
 using Tribby.Core.Enums;
+using Tribby.Core.Handlers;
 
 public class BusinessLogic
 {
-    
-    public Share ProcessShare(int shareTypeId, decimal totalAmount, int numberOfUsers)
+    private User User { get; set; }
+
+    private Group Group { get; set; }
+
+    private SqliteDbHandler sqliteDb { get; set; }
+
+    public BusinessLogic()
     {
+        sqliteDb = new SqliteDbHandler();
+    }
+
+    public Task<List<Group>> GetGroups()
+    {
+        return sqliteDb.GetGroups();
+    }
+
+    public async Task<Group?> SelectGroup(int groupId)
+    {
+        var groups = await sqliteDb.GetGroups();
+
+        if (groups == null)
+        {
+            Debug.WriteLine($"Failed to retrieve Group [{groupId}].");
+            // groupName = options.PromptForGroupName();
+            return null;
+        }
+
+        Group group = groups.FirstOrDefault(g => g.Id == groupId);
+
+        if (group == null)
+        {
+            Debug.WriteLine($"Group with Id [{groupId}] not found.");
+            // groupName = options.PromptForGroupName();
+            return null;
+        }
+
+        Group = group;
+        return Group;
+    }
+
+    public Group GetSelectedGroup()
+    {
+        return Group;
+    }
+
+    public User GetSelectedUser()
+    {
+        return User;
+    }
+
+    public async Task<List<User>> GetUsersFromSelectedGroup()
+    {
+        if (Group == null)
+        {
+            Debug.WriteLine("Group is not selected.");
+            return new List<User>();
+        }
+        List<User> users = await sqliteDb.GetUsersInAGroup(Group.Id);
+
+        if (users == null)
+        {
+            Debug.WriteLine($"Failed to retrieve users for Group [{Group.Id}].");
+            return new List<User>();
+        }
+
+        Group.Users = users;
+        return users;
+    }
+
+    public void SelectUser(User user)
+    {
+        if (user == null)
+        {
+            Debug.WriteLine($"SelectUser() failed. User is null.");
+            return;
+        }
+        User = user;
+    }
+
+    public List<EnumShareType> GetShareTypes()
+    {
+        return sqliteDb.GetShareTypes();
+    }
+    
+    public async void ProcessShares(int payerId, int shareTypeId, decimal totalAmount, int transactionId)
+    {
+        //     await sqliteDb.CreateTransaction(transaction);
         switch (shareTypeId)
         {
             case (int)ShareTypes.Equal:
-                decimal equalShare = totalAmount / numberOfUsers;
+                int operand = Group.Users.Count;
+                decimal equalShare = totalAmount / operand;
                 // Logic for equal share
+                    foreach (var user in Group.Users)
+                    {
+                        if (user.Id != payerId)
+                        {
+                            Share userShare = new Share
+                            {
+                                Amount = equalShare,
+                                UserId = user.Id,
+                                ShareType = shareTypeId,
+                                Operand = operand,
+                            };
+                            // Logic to save userShare to database
+                        }
+                    }
                 break;
             case (int)ShareTypes.Exact:
                 // Logic for exact share
@@ -26,8 +127,10 @@ public class BusinessLogic
             default:
                 throw new ArgumentException("Invalid share type");
         }
-
-        return new Share();
     }
 
+    public void CloseConnection()
+    {
+        sqliteDb.CloseConnection();
+    }
 }
