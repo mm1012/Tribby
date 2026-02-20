@@ -7,5 +7,5 @@ public class Group
 
     public decimal Balance { get; set; }
 
-    public List<User> Users { get; } = new ();
+    public List<User> Users { get; set; } = new ();
 }
