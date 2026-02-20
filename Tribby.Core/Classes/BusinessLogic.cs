@@ -99,16 +99,6 @@ public class BusinessLogic
                 // Logic for equal share
                     foreach (var user in Group.Users)
                     {
-                        if (user.Id != payerId)
-                        {
-                            Share userShare = new Share
-                            {
-                                Amount = equalShare,
-                                UserId = user.Id,
-                                ShareType = shareTypeId,
-                            };
-                            // Logic to save userShare to database
-                        }
                     }
                 break;
             case (int)ShareTypes.Exact:

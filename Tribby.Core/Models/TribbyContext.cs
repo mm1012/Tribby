@@ -31,9 +31,5 @@ public class TribbyDbContext : DbContext
         builder.Entity<Transaction>().Property(t => t.Amount)
             .HasConversion<double>()
             .HasColumnType("NUMERIC");
-
-        builder.Entity<Share>().Property(s => s.Amount)
-            .HasConversion<double>()
-            .HasColumnType("NUMERIC");
     }
 }

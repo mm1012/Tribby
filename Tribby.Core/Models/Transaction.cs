@@ -1,6 +1,4 @@
-﻿using System.Transactions;
-
-public class Transaction
+﻿public class Transaction
 {
     public int Id { get; set; }
 
@@ -11,9 +9,8 @@ public class Transaction
     public virtual int UserId { get; set; }
 
     public virtual int ShareType { get; set; }
-
-    public List<Share> Shares { get; } = new ();
-
+    
     public bool IsCleared { get; set;}
 
+    public int GroupId { get; set; }
 }
