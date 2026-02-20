@@ -95,7 +95,7 @@ public class BusinessLogic
         {
             case (int)ShareTypes.Equal:
                 int operand = Group.Users.Count;
-                decimal equalShare = totalAmount / operand;
+                decimal equalShare = Math.Ceiling(totalAmount / operand);
                 // Logic for equal share
                     foreach (var user in Group.Users)
                     {
