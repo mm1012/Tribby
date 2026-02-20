@@ -10,7 +10,7 @@ public class Transaction
 
     public virtual int UserId { get; set; }
 
-    public virtual int ShareId { get; set; }
+    public virtual int ShareType { get; set; }
 
     public List<Share> Shares { get; } = new ();
 

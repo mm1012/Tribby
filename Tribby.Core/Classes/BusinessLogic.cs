@@ -106,7 +106,6 @@ public class BusinessLogic
                                 Amount = equalShare,
                                 UserId = user.Id,
                                 ShareType = shareTypeId,
-                                Operand = operand,
                             };
                             // Logic to save userShare to database
                         }
