@@ -87,19 +87,36 @@ public class BusinessLogic
     {
         return sqliteDb.GetShareTypes();
     }
-    
-    public async void ProcessShares(int payerId, int shareTypeId, decimal totalAmount, int transactionId)
+
+    private async Task<Transaction> SplitTransaction (int userId, decimal amount, int shareTypeId, int groupId)
     {
-        //     await sqliteDb.CreateTransaction(transaction);
-        switch (shareTypeId)
+        Transaction transaction = new Transaction
+        {
+            UserId = userId,
+            Amount = amount,
+            ShareType = shareTypeId,
+            GroupId = groupId
+        };
+
+        await sqliteDb.CreateTransaction(transaction);
+
+        return transaction;
+    }
+    
+    public async void ProcessShares(int payerId, int shareTypeId, decimal totalAmount)
+    {
+        List<Transaction> shareTransactions = new List<Transaction>();
+        switch(shareTypeId)
         {
             case (int)ShareTypes.Equal:
                 int operand = Group.Users.Count;
                 decimal equalShare = Math.Ceiling(totalAmount / operand);
                 // Logic for equal share
-                    foreach (var user in Group.Users)
-                    {
-                    }
+                foreach (var user in Group.Users)
+                {
+                    var shareTransaction = await SplitTransaction(user.Id, equalShare, shareTypeId, Group.Id);
+                    shareTransactions.Add(shareTransaction);
+                }
                 break;
             case (int)ShareTypes.Exact:
                 // Logic for exact share
@@ -111,7 +128,7 @@ public class BusinessLogic
                 // Logic for shares
                 break;
             case (int)ShareTypes.ExactAndSplit:
-                // Logic for exact and split
+                // Logic for exact and split remaining amount.
                 break;
             default:
                 throw new ArgumentException("Invalid share type");
