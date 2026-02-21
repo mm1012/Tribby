@@ -84,4 +84,19 @@ public class Options
         decimal.TryParse(input, out decInput);
         return decInput;
     }
+
+    public void DisplayTransactions(List<Transaction> transactions, string name)
+    {
+        Console.WriteLine($"-------  Transactions for {name}  -------\n");
+        foreach (var transaction in transactions)
+        {
+            Console.WriteLine($"[{transaction.Id}] {transaction.Description} - Amount: {transaction.Amount} - Paid by UserId: {transaction.UserId} - Cleared: {transaction.IsCleared}");
+        }
+        Console.WriteLine();
+    }
+
+    public void DisplayGroupBalance(decimal balance)
+    {
+        Console.WriteLine($"Current Group Balance: {balance}\n");
+    }
 }
