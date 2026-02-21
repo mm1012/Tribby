@@ -181,5 +181,37 @@ namespace Tribby.Core.Handlers
 
             return transaction;
         }
+
+        public async Task<Share> CreateShare(Share share)
+        {
+            DbContext.Shares.Add(share);
+            await DbContext.SaveChangesAsync();
+
+            return share;
+        }
+
+        public async Task<List<Transaction>> GetUsersTransactions(int userId)
+        {
+            var transactions = await DbContext.Transactions
+                .Where(t => t.UserId == userId)
+                .ToListAsync();
+            return transactions;
+        }
+
+        public async Task<Group> UpdateGroupBalance(int groupId, decimal amount)
+        {
+            var group = await DbContext.Groups
+                .FirstOrDefaultAsync(g => g.Id == groupId);
+
+            if (group == null)
+            {
+                throw new ArgumentException($"Group with Id {groupId} not found.");
+            }
+
+            group.Balance += amount;
+            await DbContext.SaveChangesAsync();
+
+            return group;
+        }
     }
 }

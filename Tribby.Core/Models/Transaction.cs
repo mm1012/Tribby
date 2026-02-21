@@ -8,7 +8,7 @@
 
     public virtual int UserId { get; set; }
 
-    public int PayerId { get; set; }
+    // public int PayerId { get; set; }
 
     public virtual int ShareType { get; set; }
 

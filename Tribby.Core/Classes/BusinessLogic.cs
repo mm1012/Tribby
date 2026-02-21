@@ -88,14 +88,15 @@ public class BusinessLogic
         return sqliteDb.GetShareTypes();
     }
 
-    private async Task<Transaction> SplitTransaction (int userId, decimal amount, int shareTypeId, int groupId)
+    private async Task<Transaction> SplitTransaction (int userId, decimal amount, int shareTypeId, int groupId, string description)
     {
         Transaction transaction = new Transaction
         {
             UserId = userId,
             Amount = amount,
             ShareType = shareTypeId,
-            GroupId = groupId
+            GroupId = groupId,
+            Description = description
         };
 
         await sqliteDb.CreateTransaction(transaction);
@@ -103,36 +104,40 @@ public class BusinessLogic
         return transaction;
     }
     
-    public async void ProcessShares(int payerId, int shareTypeId, decimal totalAmount)
+    public async void SplitEqually(string description, decimal totalAmount)
     {
         List<Transaction> shareTransactions = new List<Transaction>();
-        switch(shareTypeId)
+
+        int operand = Group.Users.Count;
+        decimal equalShare = Math.Ceiling(totalAmount / operand);
+        // Logic for equal share
+        foreach (var user in Group.Users)
         {
-            case (int)ShareTypes.Equal:
-                int operand = Group.Users.Count;
-                decimal equalShare = Math.Ceiling(totalAmount / operand);
-                // Logic for equal share
-                foreach (var user in Group.Users)
-                {
-                    var shareTransaction = await SplitTransaction(user.Id, equalShare, shareTypeId, Group.Id);
-                    shareTransactions.Add(shareTransaction);
-                }
-                break;
-            case (int)ShareTypes.Exact:
-                // Logic for exact share
-                break;
-            case (int)ShareTypes.Percentage:
-                // Logic for percentage share
-                break;
-            case (int)ShareTypes.Shares:
-                // Logic for shares
-                break;
-            case (int)ShareTypes.ExactAndSplit:
-                // Logic for exact and split remaining amount.
-                break;
-            default:
-                throw new ArgumentException("Invalid share type");
+            var shareTransaction = await SplitTransaction(
+                user.Id, equalShare, 
+                (int)ShareTypes.Equal, 
+                Group.Id, 
+                description);
+            shareTransactions.Add(shareTransaction);
         }
+
+        await sqliteDb.CreateShare(new Share
+        {
+            GroupId = Group.Id,
+            Transactions = shareTransactions
+        });
+    }
+
+    public async Task<List<Transaction>> GetUserTransactions()
+    {
+        if (User == null)
+        {
+            Debug.WriteLine("GetUserTransactions() failed. User is not selected.");
+            return new List<Transaction>();
+        }
+
+        var transactions = await sqliteDb.GetUserTransactions(User.Id);
+        return transactions;
     }
 
     public void CloseConnection()
