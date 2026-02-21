@@ -8,11 +8,11 @@
 
     public virtual int UserId { get; set; }
 
+    public int PayerId { get; set; }
+
     public virtual int ShareType { get; set; }
 
     public bool IsCleared { get; set;} = false;
 
     public int GroupId { get; set; }
-
-    public int ShareId { get; set; }
 }
