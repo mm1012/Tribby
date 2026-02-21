@@ -1,4 +1,5 @@
-﻿
+﻿using Tribby.Core.Enums;
+
 var options = new Options();
 var businessLogic = new BusinessLogic();
 
@@ -13,7 +14,6 @@ foreach (var grp in groups)
 
 Console.WriteLine("Enter the Id of your group: ");
 int groupId = options.GetIntInput();
-// sqliteDb.CreateGroup("Test Group");
 
 Group? group = await businessLogic.SelectGroup(groupId);
 
@@ -47,10 +47,10 @@ while (options.Current != options.ExitOption)
     switch (options.Current)
     {
         case "a":
-            Console.WriteLine("Who paid for the expense?");
-            Console.WriteLine("Select your user Id: ");
-            options.DisplayUsers(users);
-            int payerId = options.GetIntInput();
+            // Console.WriteLine("Who paid for the expense?");
+            // Console.WriteLine("Select your user Id: ");
+            // options.DisplayUsers(users);
+            // int payerId = options.GetIntInput();
 
             Console.WriteLine("Enter a description for the transaction: ");
             string description = options.GetInput();
@@ -66,7 +66,28 @@ while (options.Current != options.ExitOption)
             Console.WriteLine("Choose a share type: ");
             int shareTypeId = options.GetIntInput();
 
-            // options.DisplayTransaction();
+            switch(shareTypeId)
+            {
+                case (int)ShareTypes.Equal:
+                    businessLogic.SplitEqually(description,totalAmount);
+                    break;
+                case (int)ShareTypes.Exact:
+                    // Logic for exact share
+                    break;
+                case (int)ShareTypes.Percentage:
+                    // Logic for percentage share
+                    break;
+                case (int)ShareTypes.Shares:
+                    // Logic for shares
+                    break;
+                case (int)ShareTypes.ExactAndSplit:
+                    // Logic for exact and split remaining amount.
+                    break;
+                default:
+                    throw new ArgumentException("Invalid share type");
+            }
+
+            options.DisplayTransactions(await businessLogic.GetUserTransactions(), user.Name);
 
             // Console.WriteLine("Confirm transaction: ");
 
@@ -80,7 +101,6 @@ while (options.Current != options.ExitOption)
             //         IsCleared = false
             //     };
 
-            //     businessLogic.ProcessShare(shareTypeId, totalAmount);
             //     Console.WriteLine("Transaction created successfully.");
             // }
             // else
