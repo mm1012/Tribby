@@ -3,6 +3,9 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+# LLM
+opencode.json
+
 # Sqlite
 *.db
 *.db*
