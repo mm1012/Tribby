@@ -1,5 +1,9 @@
 # Tribby Budgeting App - MVP Implementation Plan
 
+## 🏷️ Naming Convention Note
+**Backend (Core/API)**: Keep current names (`Account`, `Envelope`, `UntrackedBalance`, `TotalBudget`) for consistency with database schema and existing code conventions.  
+**Frontend (Console/Web)**: Use intuitive user-facing names (`Wallet`, `Bucket`, `FreeBalance`, `AvailableBalance`). Add mapping layer or DTO transformation between backend and frontend.
+
 ## 📋 Core Architecture Summary
 
 ```
