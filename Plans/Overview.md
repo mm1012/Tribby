@@ -1,4 +1,4 @@
-# Tribby Budgeting App - MVP Implementation Plan
+# Tribby Budgeting App - Overview
 
 ## 🏷️ Naming Convention Note
 **Backend (Core/API)**: Keep current names (`Account`, `Envelope`, `UntrackedBalance`, `TotalBudget`) for consistency with database schema and existing code conventions.  
