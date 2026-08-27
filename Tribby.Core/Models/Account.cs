@@ -19,5 +19,5 @@ public class Account
     /// The total budget of the account, which is the sum of the untracked balance
     /// and the budgets of all envelopes.
     /// </summary>
-    public decimal TotalBudget => UntrackedBalance + Envelopes.Sum(e => e.Budget);
+    // public decimal TotalBudget => UntrackedBalance + Envelopes.Sum(e => e.Budget);
 }
