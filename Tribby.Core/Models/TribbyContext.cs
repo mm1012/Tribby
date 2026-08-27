@@ -2,12 +2,9 @@ using Microsoft.EntityFrameworkCore;
 
 public class TribbyDbContext : DbContext
 {
-    public DbSet<User> Users { get; set;}
-    public DbSet<Group> Groups { get; set; }
-    public DbSet<Transaction> Transactions { get; set; }
-    public DbSet<Share> Shares { get; set; }
-    public DbSet<EnumShareType> EnumShareTypes { get; set; }
-
+    /// <summary>
+    /// Path to the database file on disk.
+    /// </summary>
     public string DbPath { get; } 
 
     public TribbyDbContext ()
@@ -22,14 +19,4 @@ public class TribbyDbContext : DbContext
     // special "local" folder for your platform.
     protected override void OnConfiguring(DbContextOptionsBuilder options)
         => options.UseSqlite($"Data Source={DbPath}");
-
-    protected override void OnModelCreating(ModelBuilder builder) {
-        builder.Entity<Group>().Property(g => g.Balance)
-            .HasConversion<double>()
-            .HasColumnType("NUMERIC");
-        
-        builder.Entity<Transaction>().Property(t => t.Amount)
-            .HasConversion<double>()
-            .HasColumnType("NUMERIC");
-    }
 }
